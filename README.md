@@ -25,3 +25,20 @@ chmod +x deploy.sh
 ```
 
 For later releases, push to `main` and run `./deploy.sh` again on the server. The script pulls the current commit, installs requirements, and restarts the service.
+
+## Docker
+
+Build and run the application locally:
+
+```bash
+docker build -t YOUR_DOCKERHUB_USERNAME/rohithaws-flask:latest .
+docker run --rm -d --name rohithaws-flask -p 8000:8000 YOUR_DOCKERHUB_USERNAME/rohithaws-flask:latest
+curl http://localhost:8000/health
+```
+
+Push the tested image to Docker Hub:
+
+```bash
+docker login
+docker push YOUR_DOCKERHUB_USERNAME/rohithaws-flask:latest
+```
