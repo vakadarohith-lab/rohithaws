@@ -52,3 +52,12 @@ ansible-playbook -i ansible/inventory.ini ansible/deploy-flask-container.yml
 ```
 
 The playbook installs Docker, pulls `rohithdockerr/python-demo:latest`, and runs it on port 80 on each managed node.
+
+## Git download email notifications
+
+`deploy.sh` sends an SNS email notification after every successful or failed Git clone/pull. It includes the server name, repository, operation, result, and UTC time. The EC2 instance needs an IAM role allowing `sns:Publish` to the configured topic. Configure the topic on the server once:
+
+```bash
+export GIT_NOTIFICATION_TOPIC_ARN='arn:aws:sns:ap-south-1:ACCOUNT_ID:TOPIC_NAME'
+bash scripts/configure-git-email-notification.sh
+```
