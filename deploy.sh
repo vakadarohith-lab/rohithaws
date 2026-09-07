@@ -21,15 +21,23 @@ notify_git_operation() {
   repository_name="${repository_name%.git}"
   message="Server: $(hostname)\nRepository: ${repository_name}\nOperation: ${GIT_OPERATION}\nResult: ${result}\nDate and time (UTC): $(date --utc '+%Y-%m-%dT%H:%M:%SZ')"
 
-  aws sns publish \
-    --region "${AWS_REGION:-ap-south-1}" \
-    --topic-arn "$GIT_NOTIFICATION_TOPIC_ARN" \
-    --subject "Git ${GIT_OPERATION} ${result}: ${repository_name}" \
-    --message "$message" || echo "Git notification could not be sent." >&2
+  python3 - "$GIT_NOTIFICATION_TOPIC_ARN" "${AWS_REGION:-ap-south-1}" \
+    "Git ${GIT_OPERATION} ${result}: ${repository_name}" "$message" <<'PY' || \
+    echo "Git notification could not be sent." >&2
+import sys
+import boto3
+
+topic_arn, region, subject, message = sys.argv[1:]
+boto3.client("sns", region_name=region).publish(
+    TopicArn=topic_arn,
+    Subject=subject,
+    Message=message,
+)
+PY
 }
 
 sudo apt-get update
-sudo apt-get install -y awscli git nginx python3-venv python3-pip
+sudo apt-get install -y git nginx python3-boto3 python3-venv python3-pip
 
 if [ -d "$APP_DIR/.git" ]; then
   GIT_OPERATION=pull
