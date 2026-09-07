@@ -1,0 +1,8 @@
+[flask_nodes]
+# Replace with the two managed-node private IP addresses.
+10.0.0.10 ansible_user=ubuntu
+10.0.0.11 ansible_user=ubuntu
+
+[flask_nodes:vars]
+ansible_ssh_private_key_file=/home/ubuntu/.ssh/project-mumbai-ssh.pem
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'

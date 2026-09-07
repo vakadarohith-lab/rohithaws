@@ -1,0 +1,37 @@
+---
+- name: Deploy the Flask container to managed EC2 nodes
+  hosts: flask_nodes
+  become: true
+  gather_facts: true
+
+  vars:
+    image_name: rohithdockerr/python-demo:latest
+    container_name: python-demo
+
+  tasks:
+    - name: Install Docker Engine
+      ansible.builtin.apt:
+        name: docker.io
+        state: present
+        update_cache: true
+
+    - name: Enable Docker
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Pull the Flask image from Docker Hub
+      ansible.builtin.command: "docker pull {{ image_name }}"
+      changed_when: false
+
+    - name: Remove an older application container if present
+      ansible.builtin.command: "docker rm -f {{ container_name }}"
+      register: remove_container
+      changed_when: remove_container.rc == 0
+      failed_when: remove_container.rc not in [0, 1]
+
+    - name: Run the Flask container
+      ansible.builtin.command: >-
+        docker run --detach --name {{ container_name }}
+        --restart unless-stopped --publish 80:8000 {{ image_name }}

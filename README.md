@@ -42,3 +42,13 @@ Push the tested image to Docker Hub:
 docker login
 docker push rohithdockerr/python-demo:latest
 ```
+
+## Ansible deployment to two EC2 managed nodes
+
+From the Ansible control node, create an inventory with the private IP addresses of the two nodes, then run:
+
+```bash
+ansible-playbook -i ansible/inventory.ini ansible/deploy-flask-container.yml
+```
+
+The playbook installs Docker, pulls `rohithdockerr/python-demo:latest`, and runs it on port 80 on each managed node.
