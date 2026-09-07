@@ -31,8 +31,8 @@ For later releases, push to `main` and run `./deploy.sh` again on the server. Th
 Build and run the application locally:
 
 ```bash
-docker build -t YOUR_DOCKERHUB_USERNAME/rohithaws-flask:latest .
-docker run --rm -d --name rohithaws-flask -p 8000:8000 YOUR_DOCKERHUB_USERNAME/rohithaws-flask:latest
+docker build -t rohithdockerr/python-demo:latest .
+docker run --rm -d --name python-demo -p 8000:8000 rohithdockerr/python-demo:latest
 curl http://localhost:8000/health
 ```
 
@@ -40,5 +40,5 @@ Push the tested image to Docker Hub:
 
 ```bash
 docker login
-docker push YOUR_DOCKERHUB_USERNAME/rohithaws-flask:latest
+docker push rohithdockerr/python-demo:latest
 ```
