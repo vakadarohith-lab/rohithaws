@@ -36,5 +36,6 @@ sudo rm -f /etc/nginx/sites-enabled/default
 sudo ln -sfn /etc/nginx/sites-available/flask-app /etc/nginx/sites-enabled/flask-app
 sudo nginx -t
 sudo systemctl daemon-reload
-sudo systemctl enable --now flask-app nginx
+sudo systemctl enable --now flask-app
+sudo systemctl restart nginx
 curl --fail http://127.0.0.1/health
