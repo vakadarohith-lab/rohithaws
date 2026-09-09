@@ -26,6 +26,10 @@ chmod +x deploy.sh
 
 For later releases, push to `main` and run `./deploy.sh` again on the server. The script pulls the current commit, installs requirements, and restarts the service.
 
+## GitHub automation
+
+This repository includes automated GitHub Actions deployment, a Jenkins pipeline alternative, branch-promotion guidance, and a signed webhook receiver. See [GitHub CI/CD setup](docs/GITHUB_CICD_SETUP.md).
+
 ## Docker
 
 Build and run the application locally:
