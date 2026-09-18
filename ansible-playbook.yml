@@ -1,0 +1,70 @@
+- name: Deploy FoodFlow containers
+  hosts: foodflow_nodes
+  become: true
+  tasks:
+    - name: Install Docker and Compose
+      apt:
+        update_cache: true
+        name:
+          - docker.io
+          - docker-compose-v2
+        state: present
+
+    - name: Enable Docker
+      systemd:
+        name: docker
+        enabled: true
+        state: started
+
+    - name: Create application directory
+      file:
+        path: /opt/foodflow
+        state: directory
+        mode: '0755'
+
+    - name: Copy Compose definition
+      copy:
+        src: docker-compose.yml
+        dest: /opt/foodflow/docker-compose.yml
+        mode: '0644'
+
+    - name: Create deployment environment
+      copy:
+        dest: /opt/foodflow/.env
+        mode: '0600'
+        force: false
+        content: |
+          DJANGO_SECRET_KEY={{ lookup('password', '/dev/null length=48 chars=ascii_letters,digits') }}
+          DB_PASSWORD={{ lookup('password', '/dev/null length=32 chars=ascii_letters,digits') }}
+          MARIADB_ROOT_PASSWORD={{ lookup('password', '/dev/null length=32 chars=ascii_letters,digits') }}
+          ALLOWED_HOSTS={{ ansible_host }},{{ public_ip }},localhost,127.0.0.1
+          CORS_ALLOWED_ORIGINS=http://{{ public_ip }}:8080
+          FRONTEND_URL=http://{{ public_ip }}:8080
+
+    - name: Permit the node public address in Django
+      lineinfile:
+        path: /opt/foodflow/.env
+        regexp: '^ALLOWED_HOSTS='
+        line: 'ALLOWED_HOSTS={{ ansible_host }},{{ public_ip }},localhost,127.0.0.1'
+
+    - name: Configure the frontend public origin
+      lineinfile:
+        path: /opt/foodflow/.env
+        regexp: '^CORS_ALLOWED_ORIGINS='
+        line: 'CORS_ALLOWED_ORIGINS=http://{{ public_ip }}:8080'
+
+    - name: Configure the public frontend URL
+      lineinfile:
+        path: /opt/foodflow/.env
+        regexp: '^FRONTEND_URL='
+        line: 'FRONTEND_URL=http://{{ public_ip }}:8080'
+
+    - name: Pull FoodFlow images
+      command: docker compose pull
+      args:
+        chdir: /opt/foodflow
+
+    - name: Start FoodFlow
+      command: docker compose up -d --force-recreate api web
+      args:
+        chdir: /opt/foodflow
