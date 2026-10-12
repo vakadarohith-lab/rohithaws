@@ -1,0 +1,4 @@
+[food_delivery]
+# Replace with the public DNS name or IP address of your Linux host.
+# food-web-01 ansible_host=203.0.113.10
+

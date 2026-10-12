@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ff5a36" />
+    <meta name="description" content="Savorly food delivery â€” fresh favourites, delivered fast." />
+    <title>Savorly â€” Food that fits your moment</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Savorly home"><span class="brand-mark">S</span>Savorly</a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="#restaurants">Restaurants</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#offers">Offers</a>
+      </nav>
+      <div class="header-actions">
+        <button class="location-button" type="button" id="locationButton" aria-label="Set delivery location">âŒ– <span>Deliver to</span><strong>MG Road, Bengaluru</strong></button>
+        <button class="cart-button" type="button" id="openCart" aria-label="Open cart"><span>Bag</span><b id="cartCount">0</b></button>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-heading">
+        <div class="hero-copy">
+          <p class="eyebrow">Bengaluru's best, on your doorstep</p>
+          <h1 id="hero-heading">Good food for your <em>every</em> mood.</h1>
+          <p class="hero-description">From bright breakfasts to midnight biryani, discover independent kitchens and favourites near you.</p>
+          <form class="search" id="searchForm" role="search">
+            <label class="sr-only" for="foodSearch">Search for dishes or restaurants</label>
+            <span aria-hidden="true">âŒ•</span>
+            <input id="foodSearch" name="food" type="search" placeholder="Search dosa, pizza, biryani..." autocomplete="off" />
+            <button type="submit">Find food</button>
+          </form>
+          <div class="trust-row" aria-label="Service highlights">
+            <span><b>4.8</b> average rating</span>
+            <span><b>28 min</b> average delivery</span>
+            <span><b>2,000+</b> local kitchens</span>
+          </div>
+        </div>
+        <div class="hero-visual" aria-label="Colourful food delivery illustration">
+          <div class="sun-disc"></div>
+          <div class="hero-card floating-card card-one"><span>âœ¦</span><b>Rated by locals</b><small>4.8 / 5 today</small></div>
+          <div class="food-plate"><div class="plate-rim"></div><div class="bowl"><span class="rice"></span><span class="curry curry-one"></span><span class="curry curry-two"></span><span class="herb herb-one"></span><span class="herb herb-two"></span></div></div>
+          <div class="hero-card floating-card card-two"><span>âš¡</span><b>Fresh &amp; fast</b><small>From kitchen to you</small></div>
+          <div class="leaf leaf-one"></div><div class="leaf leaf-two"></div>
+        </div>
+      </section>
+
+      <section class="category-strip" aria-label="Food categories">
+        <button class="category active" data-filter="all"><span>ðŸ½ï¸</span>All</button>
+        <button class="category" data-filter="Indian"><span>ðŸ›</span>Indian</button>
+        <button class="category" data-filter="Italian"><span>ðŸ</span>Italian</button>
+        <button class="category" data-filter="Asian"><span>ðŸœ</span>Asian</button>
+        <button class="category" data-filter="Dessert"><span>ðŸ°</span>Dessert</button>
+        <button class="category" data-filter="Healthy"><span>ðŸ¥—</span>Healthy</button>
+      </section>
+
+      <section class="restaurants section-shell" id="restaurants" aria-labelledby="restaurant-heading">
+        <div class="section-heading"><div><p class="eyebrow">Curated for you</p><h2 id="restaurant-heading">Popular around you</h2></div><button class="text-button" type="button" id="showAll">See all restaurants <span>â†’</span></button></div>
+        <div class="restaurant-grid" id="restaurantGrid"></div>
+      </section>
+
+      <section class="offer-banner section-shell" id="offers" aria-label="Savorly first order offer">
+        <div><p class="eyebrow">A little welcome gift</p><h2>20% off your first delicious decision.</h2><p>Use code <strong>HELLOSAVORY</strong> at checkout. Up to â‚¹100 off.</p></div>
+        <button class="light-button" type="button" id="copyOffer">Copy code <span>â§‰</span></button>
+        <div class="offer-flower" aria-hidden="true">âœ³</div>
+      </section>
+
+      <section class="how-it-works section-shell" id="how-it-works" aria-labelledby="how-heading">
+        <div class="section-heading"><div><p class="eyebrow">Simple, by design</p><h2 id="how-heading">Your next meal in three easy steps</h2></div></div>
+        <div class="steps">
+          <article><span class="step-number">01</span><div class="step-icon peach">âŒ•</div><h3>Find your craving</h3><p>Browse menus from the places you already love and ones youâ€™re about to.</p></article>
+          <article><span class="step-number">02</span><div class="step-icon yellow">âŒ‘</div><h3>Make it yours</h3><p>Add notes, swap sides and build a basket that fits exactly what you want.</p></article>
+          <article><span class="step-number">03</span><div class="step-icon mint">â†—</div><h3>Follow the flavour</h3><p>Track your order from the first sizzle to the doorbell ring.</p></article>
+        </div>
+      </section>
+    </main>
+
+    <footer><a class="brand" href="#top"><span class="brand-mark">S</span>Savorly</a><p>Made for good days and hungry nights.</p><small>Â© <span id="year"></span> Savorly. Demo food delivery experience.</small></footer>
+
+    <aside class="cart-drawer" id="cartDrawer" aria-labelledby="cartTitle" aria-hidden="true">
+      <div class="cart-head"><div><p class="eyebrow">Your order</p><h2 id="cartTitle">Your bag</h2></div><button class="close-button" id="closeCart" type="button" aria-label="Close cart">Ã—</button></div>
+      <div class="cart-items" id="cartItems"><p class="empty-cart">Your bag is waiting for something delicious.</p></div>
+      <div class="cart-footer"><div class="total-row"><span>Estimated total</span><strong id="cartTotal">â‚¹0</strong></div><button class="checkout-button" id="checkoutButton" type="button" disabled>Continue to checkout</button></div>
+    </aside>
+    <div class="backdrop" id="backdrop" hidden></div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
+

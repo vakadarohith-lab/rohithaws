@@ -1,0 +1,71 @@
+---
+- name: Deploy the Savorly food-delivery website container
+  hosts: "{{ target_group | default('food_delivery') }}"
+  become: true
+  gather_facts: true
+
+  vars:
+    image_name: rohithdockerr/food-delivery:latest
+    image_archive: ""
+    container_name: food-delivery-site
+    host_port: 80
+
+  pre_tasks:
+    - name: Require a Debian or Ubuntu target
+      ansible.builtin.assert:
+        that: ansible_facts.os_family == 'Debian'
+        fail_msg: This playbook currently supports Debian and Ubuntu hosts.
+
+  tasks:
+    - name: Install Docker Engine package
+      ansible.builtin.apt:
+        name: docker.io
+        state: present
+        update_cache: true
+
+    - name: Start Docker service
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Transfer a locally built image archive when Docker Hub is unavailable
+      ansible.builtin.copy:
+        src: "{{ image_archive }}"
+        dest: /tmp/food-delivery-image.tar
+        mode: '0600'
+      when: image_archive | length > 0
+
+    - name: Load the transferred food-delivery image
+      ansible.builtin.command:
+        cmd: docker load --input /tmp/food-delivery-image.tar
+      when: image_archive | length > 0
+      changed_when: true
+
+    - name: Pull the requested food-delivery image from Docker Hub
+      ansible.builtin.command:
+        cmd: docker pull {{ image_name }}
+      changed_when: false
+      when: image_archive | length == 0
+
+    - name: Remove any previous website container
+      ansible.builtin.command:
+        cmd: docker rm --force {{ container_name }}
+      register: remove_container
+      changed_when: remove_container.rc == 0
+      failed_when: remove_container.rc not in [0, 1]
+
+    - name: Start the food-delivery website container
+      ansible.builtin.command:
+        cmd: docker run --detach --name {{ container_name }} --restart unless-stopped --publish {{ host_port }}:80 {{ image_name }}
+      changed_when: true
+
+    - name: Confirm the food-delivery home page is healthy
+      ansible.builtin.uri:
+        url: http://127.0.0.1/
+        status_code: 200
+      retries: 10
+      delay: 2
+      register: health
+      until: health.status == 200
+
